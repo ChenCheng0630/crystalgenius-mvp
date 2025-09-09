@@ -27,7 +27,9 @@ MATERIAL_VALUES: set[str] = set()
 CATEGORY_NAME_VALUES_BY_PARENT: Dict[int, set[str]] = {}
 CURATIONS_CONFIG: dict | None = None
 
-DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+# Use environment variable for data directory, fallback to relative path
+# In Docker, data is mounted at /app/data, otherwise use relative path
+DATA_DIR = Path("/app/data")
 
 
 def enrich_product(p: Product) -> None:
