@@ -1,1 +1,1 @@
-# shopgenius-mvp
+# crystalgenius-mvp
