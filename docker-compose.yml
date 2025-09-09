@@ -1,0 +1,52 @@
+# Docker Compose file for CrystalGenius MVP
+
+services:
+  backend:
+    build: ./backend
+    container_name: crystalgenius-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount data directory
+      - ./data:/app/data:ro
+      # Mount backend .env file
+      - ./backend/.env:/app/.env:ro
+    environment:
+      - PYTHONPATH=/app
+      - DATA_DIR=/app/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - crystalgenius-network
+
+  frontend:
+    build: ./frontend
+    container_name: crystalgenius-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    environment:
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - crystalgenius-network
+
+networks:
+  crystalgenius-network:
+    driver: bridge
+
+volumes:
+  # Optional: if you want to persist any data
+  crystalgenius-data:
