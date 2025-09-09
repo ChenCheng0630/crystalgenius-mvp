@@ -5,9 +5,9 @@ from __future__ import annotations
 import uuid
 from typing import Dict
 
-from ..models import Cart, CartItem
-from .. import data_loader
-from ..repositories import recompute_totals
+from models import Cart, CartItem
+import data_loader
+from repositories import recompute_totals
 
 
 CARTS: Dict[str, Cart] = {}
@@ -48,5 +48,13 @@ def update_item(session_id: str, item_id: str, quantity: int) -> Cart:
 def remove_item(session_id: str, item_id: str) -> Cart:
     cart = get_cart(session_id)
     cart.items = [i for i in cart.items if i.id != item_id]
+    recompute_totals(cart)
+    return cart
+
+
+def clear_cart(session_id: str) -> Cart:
+    """Clear all items from the cart."""
+    cart = get_cart(session_id)
+    cart.items = []
     recompute_totals(cart)
     return cart

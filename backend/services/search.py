@@ -5,8 +5,8 @@ from __future__ import annotations
 import re
 from typing import Dict, Any
 
-from .. import data_loader
-from ..repositories import tokenize
+import data_loader
+from repositories import tokenize
 
 
 PRICE_PATTERN = re.compile(r"(\d+)(?:元)?(以内|以下|以下|以内|以上)?")

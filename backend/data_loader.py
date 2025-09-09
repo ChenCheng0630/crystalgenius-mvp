@@ -13,7 +13,7 @@ import random
 from pathlib import Path
 from typing import Dict, List
 
-from .models import Product, Category, ParentCategory
+from models import Product, Category, ParentCategory
 
 # Public containers populated at start-up.  The names mirror those used in
 # ``docs/backend-api-pseudo-code.md``.
@@ -108,7 +108,7 @@ def load_parent_categories() -> Dict[int, ParentCategory]:
                 name=row["name"],
                 image=row.get("image") or None,
             )
-            PARENT_CATEGORIES[pc.reference_id] = pc
+            PARENT_CATEGORIES[pc.id] = pc
     return PARENT_CATEGORIES
 
 

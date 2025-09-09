@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing import Iterable, List, Tuple, Dict
 
-from . import data_loader
-from .models import Product, Category, ParentCategory, Cart
+import data_loader
+from models import Product, Category, ParentCategory, Cart
 
 
 # ---------------------------------------------------------------------------
@@ -15,9 +15,10 @@ def paginate(items: List, page: int = 1, size: int = 20) -> Tuple[List, Dict[str
     """Return a slice of ``items`` with pagination metadata."""
 
     total = len(items)
+    pages = (total - 1) // size + 1 if total > 0 else 0
     start = (page - 1) * size
     end = start + size
-    return items[start:end], {"page": page, "page_size": size, "total": total}
+    return items[start:end], {"page": page, "page_size": size, "total": total, "pages": pages}
 
 
 # ---------------------------------------------------------------------------

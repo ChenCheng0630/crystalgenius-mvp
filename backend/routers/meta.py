@@ -4,9 +4,10 @@ from __future__ import annotations
 
 from fastapi import APIRouter, HTTPException, Query
 
-from .. import data_loader
-from ..repositories import serialize_category, serialize_parent
-from ..services import events
+import data_loader
+from utils import raise_error_response
+from repositories import serialize_category, serialize_parent
+from services import events
 
 router = APIRouter(tags=["meta"])
 
@@ -15,7 +16,7 @@ router = APIRouter(tags=["meta"])
 async def list_categories(parent_id: int = Query(..., alias="parent_id")) -> dict:
     cats = data_loader.CATEGORIES_BY_PARENT.get(parent_id)
     if cats is None:
-        raise HTTPException(status_code=404, detail="not found")
+        raise_error_response("not_found", "Parent category not found", status_code=404)
     return {"categories": [serialize_category(c) for c in cats]}
 
 
